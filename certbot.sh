@@ -1,8 +1,8 @@
 #!/bin/sh
 
-SSL_DIR="/etc/nginx/ssl"
 NGINX_PID="$1"
 
+sleep 10
 while true; do
     # create real cert
     certbot certonly \
@@ -13,9 +13,7 @@ while true; do
         --http-01-port 40000 \
         --email $CERTBOT_EMAIL \
         --domains $CERTBOT_DOMAIN $CERTBOT_FLAGS
-
-    cp "/etc/letsencrypt/live/$CERTBOT_DOMAIN/fullchain.pem" "$SSL_DIR"
-    cp "/etc/letsencrypt/live/$CERTBOT_DOMAIN/privkey.pem" "$SSL_DIR"
+    # make nginx reload
     kill -s HUP $NGINX_PID
 
     sleep 3600
